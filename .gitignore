@@ -19,3 +19,6 @@ package-lock.json
 /.idea
 /.vscode
 
+# Internal documentation (not for public repo)
+STATUS_REPORT.md
+
