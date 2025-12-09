@@ -189,6 +189,44 @@ shipping-label/
 └── .env
 ```
 
+## 💭 Assumptions and What I Would Do Next
+
+### Assumptions Made
+
+1. **USPS Only:** The application focuses on USPS shipping as specified in requirements. Other carriers (FedEx, UPS) could be added later.
+
+2. **US Domestic Shipping:** Only US addresses are supported (origin and destination). International shipping would require additional address validation and customs forms.
+
+3. **Cheapest Rate Auto-Selected:** When creating a label, the cheapest USPS rate is automatically selected to optimize cost. Users can preview rates before committing.
+
+4. **Simple User Management:** Basic authentication with Laravel Breeze. No role-based permissions or multi-tenant features (yet).
+
+5. **Docker-Based Deployment:** Development environment uses Docker. Production deployment could use the same setup or traditional LAMP stack.
+
+### What I Would Do Next
+
+**Short-term (1-2 weeks):**
+- Add comprehensive unit and feature tests (PHPUnit + Pest)
+- Implement address book for frequently used addresses
+- Allow manual rate selection (not just cheapest)
+- Add email notifications when labels are created
+- Address validation before submission (via EasyPost API)
+
+**Medium-term (1 month):**
+- Batch label creation (upload CSV with multiple addresses)
+- Advanced search and filtering with date ranges
+- Export labels history to PDF/CSV
+- Track shipment status updates via EasyPost webhooks
+- Add label templates for common shipping scenarios
+
+**Long-term (3+ months):**
+- Multi-carrier support (FedEx, UPS, DHL) with rate comparison
+- Mobile app (React Native) for on-the-go label creation
+- Analytics dashboard with shipping cost insights
+- REST API for third-party integrations (e.g., e-commerce platforms)
+- International shipping support (customs forms, duties)
+- QR code scanning for package tracking
+
 ## 📄 License
 
 This project is open-source software.
