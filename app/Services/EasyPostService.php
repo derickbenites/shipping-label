@@ -74,27 +74,6 @@ class EasyPostService
     }
 
     /**
-     * Validate a US address
-     */
-    public function validateAddress(array $address): array
-    {
-        try {
-            $verifiedAddress = $this->client->address->createAndVerify($address);
-
-            return [
-                'valid' => true,
-                'address' => $verifiedAddress,
-            ];
-
-        } catch (ApiException $e) {
-            return [
-                'valid' => false,
-                'error' => $e->getMessage(),
-            ];
-        }
-    }
-
-    /**
      * Get rates for a shipment without purchasing
      */
     public function getRates(array $fromAddress, array $toAddress, array $parcel): array
@@ -164,17 +143,5 @@ class EasyPostService
         return $uspsRates[0];
     }
 
-    /**
-     * Retrieve a shipment by ID
-     */
-    public function getShipment(string $shipmentId)
-    {
-        try {
-            return $this->client->shipment->retrieve($shipmentId);
-        } catch (ApiException $e) {
-            Log::error('EasyPost Retrieve Shipment Error: ' . $e->getMessage());
-            throw new \Exception('Failed to retrieve shipment: ' . $e->getMessage());
-        }
-    }
 }
 

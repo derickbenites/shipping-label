@@ -58,12 +58,4 @@ class ShippingLabel extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * Scope query to only include labels for a specific user
-     */
-    public function scopeForUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
-    }
 }

@@ -1,276 +1,199 @@
-# 🚢 Shipping Label System
+# 📦 Shipping Label Generator
 
-Sistema de gerenciamento de etiquetas de envio desenvolvido com **Laravel 12** e **Docker**.
+A web application for generating USPS shipping labels using the EasyPost API. Users can create, view, track, and manage their shipping labels with a modern, intuitive interface.
 
-![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+## 🚀 Quick Start
 
-## ✨ Features
+### Prerequisites
+- Docker & Docker Compose
+- Git
 
-- 🐘 **Laravel 12** - Framework PHP moderno e poderoso
-- 🐳 **Docker** - Ambiente totalmente containerizado
-- 🗄️ **MySQL 8.0** - Banco de dados robusto
-- 🌐 **Nginx** - Web server de alta performance
-- 🧪 **PHPUnit** - Testes automatizados
-- 📦 **Composer** - Gerenciamento de dependências
+### Installation
 
-## 🚀 Início Rápido
-
-### Pré-requisitos
-
-- Docker 20.10+
-- Docker Compose 2.0+
-
-### Instalação (3 minutos)
-
+1. **Clone the repository**
 ```bash
-# 1. Clone o repositório (se ainda não fez)
-git clone <seu-repositorio>
+git clone <repository-url>
 cd shipping-label
-
-# 2. Execute o setup automático
-./setup.sh
 ```
 
-Ou com Make:
-
+2. **Copy environment file**
 ```bash
-make setup
+cp .env.example .env
 ```
 
-Ou manualmente:
-
+3. **Add your EasyPost API key to `.env`**
 ```bash
-# Iniciar Docker
-sudo service docker start  # No WSL2
+EASYPOST_API_KEY=your_test_api_key_here
+```
+Get your free test API key at: https://www.easypost.com/
 
-# Construir e iniciar
+4. **Start the application**
+```bash
 docker-compose up -d --build
-
-# Aguardar MySQL (15s)
-sleep 15
-
-# Migrations
-docker exec -it shipping_app php artisan migrate
 ```
 
-### Acessar
-
-| Serviço | URL | Descrição |
-|---------|-----|-----------|
-| 🐘 **Laravel API** | http://localhost:8000 | Backend API |
-| 🌐 **Nginx** | http://localhost:80 | Web Server |
-| 🗄️ **MySQL** | localhost:3306 | Database |
-
-## 📖 Documentação
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [QUICK_START.md](QUICK_START.md) | ⚡ Início super rápido (3 min) |
-| [README-INSTALACAO.md](README-INSTALACAO.md) | 📚 Guia detalhado de instalação |
-| `make help` | 🛠️ Todos os comandos disponíveis |
-
-## 🛠️ Comandos Úteis
-
-### Make (Recomendado)
-
+5. **Install dependencies and setup database**
 ```bash
-make help           # Lista todos os comandos
-make up             # Inicia containers
-make down           # Para containers
-make logs           # Mostra logs
-make shell          # Acessa container
-make test           # Roda testes
-make migrate        # Executa migrations
-make fresh-seed     # Recria DB com dados
+docker exec shipping_app composer install
+docker exec shipping_app php artisan key:generate
+docker exec shipping_app php artisan migrate
+docker exec shipping_app npm install
+docker exec shipping_app npm run build
 ```
 
-### Docker Compose
+6. **Access the application**
+- Frontend: http://localhost:8000
+- Database: localhost:3307 (user: `shipping_user`, password: `shipping_pass`)
+
+## 📚 Features
+
+✅ **User Authentication** - Register and login  
+✅ **Create Labels** - Generate USPS shipping labels with EasyPost  
+✅ **View Rates** - Check shipping costs before creating labels  
+✅ **Track Shipments** - Direct link to USPS tracking  
+✅ **Print Labels** - PDF labels ready to print  
+✅ **Manage Labels** - View history and cancel labels  
+✅ **Search & Filter** - Find labels by tracking, status, or addresses  
+
+## 🛠️ Tech Stack
+
+**Backend:**
+- Laravel 12 (PHP 8.3)
+- MySQL 8.0
+- EasyPost API
+
+**Frontend:**
+- Vue.js 3
+- Inertia.js
+- Tailwind CSS
+
+**Infrastructure:**
+- Docker
+- Nginx
+
+## 📝 Usage
+
+### Create Your First Label
+
+1. Register or login at http://localhost:8000
+2. Click "New Label"
+3. Fill in:
+   - **From Address** (origin - US only)
+   - **To Address** (destination - US only)
+   - **Package Details** (weight in oz, dimensions in inches)
+4. Optional: Click "Get Rates" to see available shipping options
+5. Click "Create Label" to generate the shipping label
+6. Print the label and attach it to your package
+
+### US States Format
+Use 2-letter state codes (e.g., CA, NY, TX). ZIP codes must be 5 digits.
+
+## ⚙️ Configuration
+
+### Environment Variables
+Key variables in `.env`:
 
 ```bash
-docker-compose ps              # Status dos containers
-docker-compose logs -f         # Ver logs em tempo real
-docker-compose down            # Parar todos os containers
-docker-compose up -d --build   # Rebuild e iniciar
+# Application
+APP_URL=http://localhost:8000
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=shipping_label
+DB_USERNAME=shipping_user
+DB_PASSWORD=shipping_pass
+
+# EasyPost
+EASYPOST_API_KEY=your_api_key_here
 ```
 
-### Laravel (dentro do container)
+### Docker Ports
+- **8000**: Laravel application
+- **3307**: MySQL (external access)
+
+## 🧪 Testing
+
+**Test with EasyPost test addresses:**
+
+```
+From:
+417 Montgomery Street
+San Francisco, CA 94104
+
+To:
+179 N Harbor Dr
+Redondo Beach, CA 90277
+
+Package: 15.4 oz
+```
+
+## 🔧 Useful Commands
 
 ```bash
-# Entrar no container
+# Stop containers
+docker-compose stop
+
+# Restart containers
+docker-compose restart
+
+# View logs
+docker-compose logs -f app
+
+# Clear Laravel cache
+docker exec shipping_app php artisan optimize:clear
+
+# Rebuild frontend
+docker exec shipping_app npm run build
+
+# Access container shell
 docker exec -it shipping_app bash
-
-# Dentro do container
-php artisan migrate              # Rodar migrations
-php artisan make:model Product   # Criar model
-php artisan make:controller API/ProductController --api
-php artisan test                 # Rodar testes
-php artisan cache:clear          # Limpar cache
-```
-
-## 🗂️ Estrutura do Projeto
-
-```
-shipping-label/
-├── app/                    # Código da aplicação
-│   ├── Http/
-│   │   └── Controllers/   # Controllers
-│   ├── Models/            # Models Eloquent
-│   └── ...
-├── database/
-│   ├── migrations/        # Migrations do banco
-│   └── seeders/           # Seeders
-├── docker/
-│   └── nginx/             # Configurações Nginx
-├── routes/
-│   ├── api.php           # Rotas da API
-│   └── web.php           # Rotas Web
-├── tests/                 # Testes PHPUnit
-├── .env                   # Variáveis de ambiente
-├── docker-compose.yml     # Orquestração Docker
-├── Dockerfile             # Imagem Laravel
-├── Makefile              # Comandos Make
-└── setup.sh              # Script de setup automático
-```
-
-## 🔐 Credenciais
-
-### MySQL
-
-```env
-Host:     mysql (dentro do Docker) ou localhost (fora)
-Port:     3306
-Database: shipping_label
-User:     shipping_user
-Password: shipping_pass
-Root:     root_password
-```
-
-## 🧪 Testes
-
-```bash
-# Rodar todos os testes
-make test
-
-# Ou manualmente
-docker exec shipping_app php artisan test
-
-# Com coverage
-docker exec shipping_app php artisan test --coverage
 ```
 
 ## 🐛 Troubleshooting
 
-### Docker não inicia
-```bash
-sudo service docker start
+**Port 3306 already in use?**
+→ Stop local MySQL or change `DB_PORT` in `docker-compose.yml`
+
+**EasyPost API errors?**
+→ Check your API key in `.env` and restart: `docker-compose restart app`
+
+**Frontend not loading?**
+→ Rebuild assets: `docker exec shipping_app npm run build`
+
+**Database connection failed?**
+→ Ensure MySQL is healthy: `docker-compose ps`
+
+## 📁 Project Structure
+
+```
+shipping-label/
+├── app/
+│   ├── Http/Controllers/
+│   │   └── ShippingLabelController.php
+│   ├── Models/
+│   │   └── ShippingLabel.php
+│   └── Services/
+│       └── EasyPostService.php
+├── resources/
+│   └── js/
+│       └── Pages/
+│           └── ShippingLabels/
+│               ├── Index.vue
+│               ├── Create.vue
+│               └── Show.vue
+├── routes/
+│   └── web.php
+├── docker-compose.yml
+└── .env
 ```
 
-### Erro de permissão
-```bash
-make permissions
-```
+## 📄 License
 
-### MySQL não conecta
-```bash
-make logs-mysql
-make restart
-```
-
-### Porta ocupada
-Edite `.env` e mude as portas:
-```env
-APP_PORT=8001
-DB_PORT=3307
-```
-
-## 📝 Desenvolvimento
-
-### Criar um novo endpoint API
-
-```bash
-# 1. Criar migration
-docker exec shipping_app php artisan make:migration create_products_table
-
-# 2. Editar migration em database/migrations/
-
-# 3. Criar model
-docker exec shipping_app php artisan make:model Product
-
-# 4. Criar controller
-docker exec shipping_app php artisan make:controller API/ProductController --api
-
-# 5. Adicionar rotas em routes/api.php
-
-# 6. Rodar migration
-docker exec shipping_app php artisan migrate
-
-# 7. Criar testes
-docker exec shipping_app php artisan make:test ProductTest
-```
-
-### Padrão de Código
-
-O projeto usa:
-- ✅ PSR-12 (código)
-- ✅ Laravel Best Practices
-- ✅ RESTful API Design
-
-## 🚀 Deploy
-
-Para produção, lembre-se de:
-
-1. ✅ Alterar `APP_ENV=production` no `.env`
-2. ✅ Alterar `APP_DEBUG=false`
-3. ✅ Gerar nova `APP_KEY`
-4. ✅ Configurar credenciais reais de banco
-5. ✅ Otimizar: `make optimize`
-
-## 📦 Tecnologias
-
-- **Backend**: Laravel 12, PHP 8.3
-- **Database**: MySQL 8.0
-- **Web Server**: Nginx (Alpine)
-- **Container**: Docker, Docker Compose
-- **Testing**: PHPUnit
-- **Package Manager**: Composer
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/MinhaFeature`
-3. Commit: `git commit -m 'Add: Minha feature'`
-4. Push: `git push origin feature/MinhaFeature`
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT.
-
-## 👨‍💻 Autor
-
-Desenvolvido com ❤️ para gerenciamento de etiquetas de envio.
-
-## 🔗 Links Úteis
-
-- [Documentação Laravel](https://laravel.com/docs/12.x)
-- [Docker Docs](https://docs.docker.com/)
-- [MySQL Docs](https://dev.mysql.com/doc/)
-- [Nginx Docs](https://nginx.org/en/docs/)
-
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-- 📖 Leia a [documentação](README-INSTALACAO.md)
-- 🐛 Abra uma [issue](../../issues)
-- 💬 Entre em contato
+This project is open-source software.
 
 ---
 
-⭐ **Star** este projeto se ele foi útil para você!
+**Need help?** Check the EasyPost documentation: https://docs.easypost.com/
 
-🐛 Encontrou um bug? [Reporte aqui](../../issues)
-
-💡 Tem uma sugestão? [Contribua!](../../pulls)
